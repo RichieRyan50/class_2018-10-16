@@ -10,15 +10,18 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(readxl)
 library(janitor)
+library(knitr)
 ```
 
 ```{r}
 
 
 
-e_18 <- read_excel("class_enrollment_summary_by_term_10_12.xlsx") 
+e_18 <- read_excel("class_enrollment_summary_by_term_10_12.xlsx", skip = 2) %>% 
+  clean_names() %>% 
+  filter(! is.na(course_name))
 
-
+e_18
 
 ```
 
