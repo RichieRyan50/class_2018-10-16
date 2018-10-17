@@ -131,11 +131,13 @@ $(document).ready(function () {
 
 <pre class="r"><code>e_18 &lt;- read_excel(&quot;class_enrollment_summary_by_term_10_12.xlsx&quot;, skip = 2) %&gt;% 
   clean_names() %&gt;% 
-  filter(! is.na(course_name))
+  filter(! is.na(course_name)) %&gt;% 
+  distinct(course_id, .keep_all = TRUE)
 
 e_17 &lt;- read_excel(&quot;class_enrollment_summary_by_term_10.20.17.xlsx&quot;, skip = 2) %&gt;% 
   clean_names() %&gt;% 
-  filter(! is.na(course_name))
+  filter(! is.na(course_name)) %&gt;% 
+  distinct(course_id, .keep_all = TRUE)
 
 e_16 &lt;- read_excel(&quot;copy_of_class_enrollment_summary_by_term_10.06.2016.xlsx&quot;, skip = 2) %&gt;% 
   clean_names() %&gt;% 
@@ -143,7 +145,10 @@ e_16 &lt;- read_excel(&quot;copy_of_class_enrollment_summary_by_term_10.06.2016.
 
 e_15 &lt;- read_excel(&quot;CourseEnrollmentStatistics.xlsx&quot;) %&gt;% 
   clean_names() %&gt;% 
-  filter(! is.na(course_id))</code></pre>
+  filter(! is.na(course_id))
+
+
+x &lt;- left_join(e_18, e_17, by = &quot;course_id&quot;)</code></pre>
 
 
 
