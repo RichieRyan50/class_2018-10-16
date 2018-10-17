@@ -141,11 +141,13 @@ e_17 &lt;- read_excel(&quot;class_enrollment_summary_by_term_10.20.17.xlsx&quot;
 
 e_16 &lt;- read_excel(&quot;copy_of_class_enrollment_summary_by_term_10.06.2016.xlsx&quot;, skip = 2) %&gt;% 
   clean_names() %&gt;% 
-  filter(! is.na(course_name))
+  filter(! is.na(course_name)) %&gt;% 
+  distinct(course_id, .keep_all = TRUE)
 
 e_15 &lt;- read_excel(&quot;CourseEnrollmentStatistics.xlsx&quot;) %&gt;% 
   clean_names() %&gt;% 
-  filter(! is.na(course_id))
+  filter(! is.na(course_id)) %&gt;% 
+  distinct(course_id, .keep_all = TRUE)
 
 
 x &lt;- left_join(e_18, e_17, by = &quot;course_id&quot;, suffix = c(&quot;.18&quot;, &quot;.17&quot;))
@@ -168,6 +170,26 @@ x %&gt;%
 ##  8 119064    Intro to Theory of Comput…      216      159               57
 ##  9 203555    Game Theory with Applicat…       86       31               55
 ## 10 205306    The City Jail: Race and          86       33               53</code></pre>
+<pre class="r"><code>y &lt;- left_join(e_18, e_15, by = &quot;course_id&quot;, suffix = c(&quot;.18&quot;, &quot;.15&quot;))
+
+y %&gt;% 
+  select(course_id, course_name, u_grad, hcol) %&gt;% 
+  mutate(enrollment_change = u_grad - hcol) %&gt;% 
+  arrange(desc(enrollment_change)) %&gt;% 
+  slice(1:10)</code></pre>
+<pre><code>## # A tibble: 10 x 5
+##    course_id course_name                    u_grad  hcol enrollment_change
+##    &lt;chr&gt;     &lt;chr&gt;                           &lt;dbl&gt; &lt;dbl&gt;             &lt;dbl&gt;
+##  1 113501    The Ancient Greek Hero            651    42               609
+##  2 118939    Innovation in Science and Engr    197    29               168
+##  3 110766    Introduction to Probability       514   408               106
+##  4 110893    Government &amp; Politics of China    112    30                82
+##  5 111161    Intro: Functions &amp; Calculus I     184   110                74
+##  6 117853    Foundations Comparative Pol       151    86                65
+##  7 109600    Existentialism in Lit and Film     91    27                64
+##  8 110661    Artificial Intelligence           140    77                63
+##  9 122575    Physical Sciences 2               239   179                60
+## 10 112754    Moctezuma's Mexico: Then &amp; Now     99    40                59</code></pre>
 
 
 
