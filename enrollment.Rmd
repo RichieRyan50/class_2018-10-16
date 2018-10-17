@@ -36,8 +36,13 @@ e_15 <- read_excel("CourseEnrollmentStatistics.xlsx") %>%
   filter(! is.na(course_id))
 
 
-x <- left_join(e_18, e_17, by = "course_id")
+x <- left_join(e_18, e_17, by = "course_id", suffix = c(".18", ".17"))
 
+x %>% 
+  select(course_id, course_name.18, total.18, total.17) %>% 
+  mutate(enrollment_change = total.18 - total.17) %>% 
+  arrange(desc(enrollment_change)) %>% 
+  slice(1:10)
 
 ```
 

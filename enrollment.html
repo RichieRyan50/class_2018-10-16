@@ -148,7 +148,26 @@ e_15 &lt;- read_excel(&quot;CourseEnrollmentStatistics.xlsx&quot;) %&gt;%
   filter(! is.na(course_id))
 
 
-x &lt;- left_join(e_18, e_17, by = &quot;course_id&quot;)</code></pre>
+x &lt;- left_join(e_18, e_17, by = &quot;course_id&quot;, suffix = c(&quot;.18&quot;, &quot;.17&quot;))
+
+x %&gt;% 
+  select(course_id, course_name.18, total.18, total.17) %&gt;% 
+  mutate(enrollment_change = total.18 - total.17) %&gt;% 
+  arrange(desc(enrollment_change)) %&gt;% 
+  slice(1:10)</code></pre>
+<pre><code>## # A tibble: 10 x 5
+##    course_id course_name.18             total.18 total.17 enrollment_chan…
+##    &lt;chr&gt;     &lt;chr&gt;                         &lt;dbl&gt;    &lt;dbl&gt;            &lt;dbl&gt;
+##  1 113501    The Ancient Greek Hero          654      313              341
+##  2 122575    Physical Sciences 2             240      162               78
+##  3 152514    Intro to Computer Science       766      692               74
+##  4 126638    Science and Cooking             162       90               72
+##  5 126603    Finding Our Way                  93       27               66
+##  6 125932    Cure for Health Care            108       48               60
+##  7 119951    A Libertarian Perspective       302      244               58
+##  8 119064    Intro to Theory of Comput…      216      159               57
+##  9 203555    Game Theory with Applicat…       86       31               55
+## 10 205306    The City Jail: Race and          86       33               53</code></pre>
 
 
 
